@@ -36,17 +36,24 @@ namespace BackEnd
             var rand = new Random();
             for (int i = 0; i < 10; i++)
             {
+                int randValue = rand.Next(1, Categories.Count);
+
                 Products.Add(new ProductDomainModel()
                 {
                     Id = i,
-                    Category = Categories.FirstOrDefault(x => x.Id == rand.Next(1,3)),
+                    Category = Categories.FirstOrDefault(x => x.Id == randValue),
                     Name = $"Awesome name number {rand.Next(10000)}",
                     Price = rand.NextDouble() * 1000
                 });
+
+                if (Products.Last().Category == null)
+                {
+                    throw new Exception($"{i} -> {randValue}");
+                }
             }
         }
 
-        public void Set(ProductDomainModel product)
+        public void Add(ProductDomainModel product)
         {
             int lastId = Products.Max(x => x.Id);
             product.Id = lastId + 1;

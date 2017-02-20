@@ -5,7 +5,7 @@ namespace BackEnd
 {
     public interface IBackEnd
     {
-        void Set(ProductDomainModel product);
+        void Add(ProductDomainModel product);
 
         ProductDomainModel Get(int productId);
 
