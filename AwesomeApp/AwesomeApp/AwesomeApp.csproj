@@ -130,6 +130,7 @@
     </Compile>
     <Compile Include="Models\AddProducts\AddProductViewModel.cs" />
     <Compile Include="Models\Categories\CategoryViewModel.cs" />
+    <Compile Include="Models\EditProduct\EditProductViewModel.cs" />
     <Compile Include="Models\IndexViewModels\IndexViewModel.cs" />
     <Compile Include="Models\IndexViewModels\ProductFormModel.cs" />
     <Compile Include="Models\IndexViewModels\RowViewModel.cs" />
@@ -174,7 +175,7 @@
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\AddProduct.cshtml" />
-    <Content Include="Views\Home\View.cshtml" />
+    <Content Include="Views\Home\EditProduct.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

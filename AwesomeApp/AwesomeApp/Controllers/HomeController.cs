@@ -3,6 +3,7 @@ using System.Web.Mvc;
 using AutoMapper;
 using AwesomeApp.Models.AddProducts;
 using AwesomeApp.Models.Categories;
+using AwesomeApp.Models.EditProduct;
 using AwesomeApp.Models.IndexViewModels;
 using BackEnd.Category;
 using BackEnd.Models;
@@ -34,6 +35,9 @@ namespace AwesomeApp.Controllers
                     .ForMember(dest => dest.Categories, opts => opts.MapFrom(src => src));
 
                 config.CreateMap<AddProductViewModel, ProductDomainModel>();
+
+                config.CreateMap<EditProductViewModel, ProductDomainModel>()
+                    .ReverseMap();
             });
         }
 
@@ -78,9 +82,32 @@ namespace AwesomeApp.Controllers
             return View(viewModel);
         }
 
-        public ActionResult Edit(int productId)
+        [HttpGet]
+        public ActionResult EditProduct(int productId)
         {
-            throw new System.NotImplementedException();
+            ProductDomainModel products = product.Get(productId);
+
+            var viewModel = Mapper.Map<EditProductViewModel>(products);
+            IEnumerable<CategoryDomainModel> categories = category.Get();
+            viewModel.Categories = Mapper.Map<List<CategoryViewModel>>(categories);
+
+            return View(viewModel);
+        }
+
+        public ActionResult EditProduct(EditProductViewModel viewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                var domainModel = Mapper.Map<ProductDomainModel>(viewModel);
+                if (product.Update(domainModel))
+                {
+                    return RedirectToAction("Index");
+                }
+            }
+
+            IEnumerable<CategoryDomainModel> categories = category.Get();
+            viewModel.Categories = Mapper.Map<List<CategoryViewModel>>(categories);
+            return View(viewModel);
         }
 
         public ActionResult Delete(int productId)

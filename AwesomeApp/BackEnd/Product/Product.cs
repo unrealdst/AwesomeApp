@@ -9,7 +9,11 @@ namespace BackEnd.Product
     {
         public void Add(ProductDomainModel product)
         {
-            int lastId = Date.Products.Max(x => x.Id);
+            int lastId = -1;
+            if (Data.Date.Products.Any())
+            {
+                lastId = Date.Products.Max(x => x.Id);
+            }
             product.Id = lastId + 1;
             product.Category = Date.Categories.FirstOrDefault(x => x.Id == product.CategoryId);
 
@@ -18,7 +22,7 @@ namespace BackEnd.Product
 
         public ProductDomainModel Get(int productId)
         {
-            var product = Date.Products.FirstOrDefault(x => x.Id == productId);
+            ProductDomainModel product = Date.Products.FirstOrDefault(x => x.Id == productId);
 
             return product;
         }
@@ -30,10 +34,15 @@ namespace BackEnd.Product
 
         public bool Update(ProductDomainModel model)
         {
-            var oldProduct = Date.Products.FirstOrDefault(x => x.Id == model.Id);
+            ProductDomainModel oldProduct = Date.Products.FirstOrDefault(x => x.Id == model.Id);
             if (oldProduct != null)
             {
-                oldProduct.Category = model.Category;
+                CategoryDomainModel category = Data.Date.Categories.FirstOrDefault(x => x.Id == model.CategoryId);
+                if (category == null)
+                {
+                    return false;
+                }
+                oldProduct.Category = category;
                 oldProduct.Name = model.Name;
                 oldProduct.Price = model.Price;
                 return true;
@@ -43,7 +52,7 @@ namespace BackEnd.Product
 
         public bool Delete(int id)
         {
-            var productToDelete = Date.Products.FirstOrDefault(x => x.Id == id);
+            ProductDomainModel productToDelete = Date.Products.FirstOrDefault(x => x.Id == id);
             if (productToDelete != null)
             {
                 Date.Products.Remove(productToDelete);

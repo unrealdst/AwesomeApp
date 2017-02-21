@@ -26,8 +26,8 @@
                 <div class="col-md-3 text-cell">@product.Price</div>
                 <div class="col-md-3 text-cell">@product.Category.Name</div>
                 <div class="col-md-3 actions">
-                    <i class="glyphicon glyphicon-edit edit"></i>
-                    <i class="glyphicon glyphicon-trash delete"></i>
+                    <a href="@Url.Action("EditProduct", new { productId = product.Id })"><i class="glyphicon glyphicon-edit edit"></i></a>
+                    <a href="@Url.Action("Delete", new { productId = product.Id })"><i class="glyphicon glyphicon-trash delete"></i></a>
                 </div>
             </div>
         }
