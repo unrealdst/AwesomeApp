@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using BackEnd.Models;
 
-namespace BackEnd
+namespace BackEnd.Product
 {
-    public interface IBackEnd
+    public interface IProduct
     {
         void Add(ProductDomainModel product);
 

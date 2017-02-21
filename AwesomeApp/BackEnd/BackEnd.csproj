@@ -40,9 +40,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BackEnd.cs" />
+    <Compile Include="Category\Category.cs" />
+    <Compile Include="Data\Date.cs" />
+    <Compile Include="Category\ICategory.cs" />
+    <Compile Include="Product\Product.cs" />
     <Compile Include="Models\CategoryDomainModel.cs" />
-    <Compile Include="IBackEnd.cs" />
+    <Compile Include="Product\IProduct.cs" />
     <Compile Include="Models\ProductDomainModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

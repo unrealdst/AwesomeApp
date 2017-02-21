@@ -1,23 +1,25 @@
 ﻿using System.Collections.Generic;
-using System.Web.Helpers;
 using System.Web.Mvc;
 using AutoMapper;
-using AwesomeApp.Models;
 using AwesomeApp.Models.AddProducts;
 using AwesomeApp.Models.Categories;
 using AwesomeApp.Models.IndexViewModels;
-using BackEnd;
+using BackEnd.Category;
 using BackEnd.Models;
+using BackEnd.Product;
 
 namespace AwesomeApp.Controllers
 {
     public class HomeController : Controller
     {
-        private IBackEnd backEnd;
+        private readonly IProduct product;
+        private readonly ICategory category;
 
         public HomeController()
         {
-            this.backEnd = new BackEnd.BackEnd();
+            this.product = new Product();
+            this.category = new Category();
+
             Mapper.Initialize(config =>
             {
                 config.CreateMap<IEnumerable<ProductDomainModel>, IndexViewModel>()
@@ -27,13 +29,18 @@ namespace AwesomeApp.Controllers
                     .ForMember(dest => dest.Category, opts => opts.MapFrom(src => src.Category));
 
                 config.CreateMap<CategoryDomainModel, CategoryViewModel>();
+
+                config.CreateMap<IEnumerable<CategoryDomainModel>, AddProductViewModel>()
+                    .ForMember(dest => dest.Categories, opts => opts.MapFrom(src => src));
+
+                config.CreateMap<AddProductViewModel, ProductDomainModel>();
             });
         }
 
         [HttpGet]
         public ActionResult Index()
         {
-            var products = backEnd.Get();
+            IEnumerable<ProductDomainModel> products = product.Get();
             var viewModel = Mapper.Map<IndexViewModel>(products);
             return View(viewModel);
         }
@@ -42,42 +49,47 @@ namespace AwesomeApp.Controllers
         public ActionResult Create(ProductFormModel input)
         {
             var addModel = Mapper.Map<ProductDomainModel>(input);
-            backEnd.Add(addModel);
+            product.Add(addModel);
 
             return Json(new { success = true }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult AddProduct()
         {
-            var addProduct = new AddProductViewModel()
-            {
-                Categories = new List<CategoryViewModel>()
-                {
-                    new CategoryViewModel()
-                    {
-                        Id = 1,
-                        Name = "name"
-                    },
-                    new CategoryViewModel()
-                    {
-                        Id = 2,
-                        Name = "dfkls"
-                    }
-                }
-            };
+            IEnumerable<CategoryDomainModel> categories = category.Get();
+            var addProduct = Mapper.Map<AddProductViewModel>(categories);
+
             return View(addProduct);
         }
 
         [HttpPost]
-        public ActionResult AddProduct(AddProductInputModel inputModel)
+        public ActionResult AddProduct(AddProductViewModel viewModel)
         {
             if (ModelState.IsValid)
             {
-                var domainModel = Mapper.Map<ProductDomainModel>(inputModel);
-                backEnd.Add(domainModel);
+                var domainModel = Mapper.Map<ProductDomainModel>(viewModel);
+                product.Add(domainModel);
+
+                return RedirectToAction("Index");
             }
-            var viewModel = Mapper.Map<AddProductViewModel>(inputModel);
+
+            IEnumerable<CategoryDomainModel> categories = category.Get();
+            viewModel.Categories = Mapper.Map<List<CategoryViewModel>>(categories);
             return View(viewModel);
+        }
+
+        public ActionResult Edit(int productId)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public ActionResult Delete(int productId)
+        {
+            if (product.Delete(productId))
+            {
+                return RedirectToAction("Index");
+            }
+            return RedirectToAction("Index");
         }
     }
 }
