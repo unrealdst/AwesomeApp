@@ -4,22 +4,8 @@ using AwesomeApp.Models.Categories;
 
 namespace AwesomeApp.Models.EditProduct
 {
-    public class EditProductViewModel
+    public class EditProductViewModel : EditProductFormModel
     {
-        [Required]
-        public int Id { get; set; }
-        
-        [Required]
-        [MinLength(6)]
-        public string Name { get; set; }
-
-        [Required]
-        [Range(0, double.MaxValue)]
-        public double Price { get; set; }
-
         public IEnumerable<CategoryViewModel> Categories { get; set; }
-
-        [Required]
-        public int CategoryId { get; set; }
     }
 }

@@ -34,10 +34,15 @@ namespace AwesomeApp.Controllers
                 config.CreateMap<IEnumerable<CategoryDomainModel>, AddProductViewModel>()
                     .ForMember(dest => dest.Categories, opts => opts.MapFrom(src => src));
 
-                config.CreateMap<AddProductViewModel, ProductDomainModel>();
+                config.CreateMap<AddProductFormModel, ProductDomainModel>();
 
-                config.CreateMap<EditProductViewModel, ProductDomainModel>()
-                    .ReverseMap();
+                config.CreateMap<AddProductFormModel, AddProductViewModel>();
+
+                config.CreateMap<ProductDomainModel, EditProductViewModel>();
+
+                config.CreateMap<EditProductFormModel, ProductDomainModel>();
+
+                config.CreateMap<EditProductFormModel, EditProductViewModel>();
             });
         }
 
@@ -49,15 +54,6 @@ namespace AwesomeApp.Controllers
             return View(viewModel);
         }
 
-        [HttpPost]
-        public ActionResult Create(ProductFormModel input)
-        {
-            var addModel = Mapper.Map<ProductDomainModel>(input);
-            product.Add(addModel);
-
-            return Json(new { success = true }, JsonRequestBehavior.AllowGet);
-        }
-
         public ActionResult AddProduct()
         {
             IEnumerable<CategoryDomainModel> categories = category.Get();
@@ -67,18 +63,20 @@ namespace AwesomeApp.Controllers
         }
 
         [HttpPost]
-        public ActionResult AddProduct(AddProductViewModel viewModel)
+        public ActionResult AddProduct(AddProductFormModel inputModel)
         {
             if (ModelState.IsValid)
             {
-                var domainModel = Mapper.Map<ProductDomainModel>(viewModel);
+                var domainModel = Mapper.Map<ProductDomainModel>(inputModel);
                 product.Add(domainModel);
 
                 return RedirectToAction("Index");
             }
 
+            var viewModel = Mapper.Map<AddProductViewModel>(inputModel);
             IEnumerable<CategoryDomainModel> categories = category.Get();
             viewModel.Categories = Mapper.Map<List<CategoryViewModel>>(categories);
+
             return View(viewModel);
         }
 
@@ -94,19 +92,21 @@ namespace AwesomeApp.Controllers
             return View(viewModel);
         }
 
-        public ActionResult EditProduct(EditProductViewModel viewModel)
+        public ActionResult EditProduct(EditProductFormModel inputModel)
         {
             if (ModelState.IsValid)
             {
-                var domainModel = Mapper.Map<ProductDomainModel>(viewModel);
+                var domainModel = Mapper.Map<ProductDomainModel>(inputModel);
                 if (product.Update(domainModel))
                 {
                     return RedirectToAction("Index");
                 }
             }
 
+            var viewModel = Mapper.Map<EditProductViewModel>(inputModel);
             IEnumerable<CategoryDomainModel> categories = category.Get();
             viewModel.Categories = Mapper.Map<List<CategoryViewModel>>(categories);
+
             return View(viewModel);
         }
 

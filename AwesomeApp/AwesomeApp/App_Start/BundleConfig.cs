@@ -35,7 +35,7 @@ namespace AwesomeApp
                       "~/Content/IndexStyles.css"));
 
             bundles.Add(new StyleBundle("~/Detail/css").Include(
-                      "~/Content/AddProductStyles.css"));
+                      "~/Content/FormProductStyles.css"));
 
         }
     }

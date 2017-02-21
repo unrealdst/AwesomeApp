@@ -131,15 +131,16 @@
     <Compile Include="Models\AddProducts\AddProductViewModel.cs" />
     <Compile Include="Models\Categories\CategoryViewModel.cs" />
     <Compile Include="Models\EditProduct\EditProductViewModel.cs" />
+    <Compile Include="Models\EditProduct\EditProductFormModel.cs" />
     <Compile Include="Models\IndexViewModels\IndexViewModel.cs" />
-    <Compile Include="Models\IndexViewModels\ProductFormModel.cs" />
+    <Compile Include="Models\AddProducts\AddProductFormModel.cs" />
     <Compile Include="Models\IndexViewModels\RowViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
-    <Content Include="Content\AddProductStyles.css" />
+    <Content Include="Content\FormProductStyles.css" />
     <Content Include="Content\IndexStyles.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
